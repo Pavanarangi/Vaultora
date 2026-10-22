@@ -26,7 +26,7 @@ describe('LoginPage', () => {
 
   it('renders sign in form by default', () => {
     renderLogin()
-    expect(screen.getByRole('heading', { name: /TrustVault/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Vaultora/i })).toBeInTheDocument()
     expect(screen.getByLabelText(/email address/i)).toBeInTheDocument()
     expect(screen.getByPlaceholderText(/your password/i)).toBeInTheDocument()
     // Two "Sign In" buttons exist (tab + submit); both should be present
@@ -72,8 +72,8 @@ describe('LoginPage', () => {
     renderLogin()
     const adminBtn = screen.getByRole('button', { name: /admin/i })
     await user.click(adminBtn)
-    expect(screen.getByLabelText(/email address/i)).toHaveValue('admin@trustvault.dev')
-    expect(screen.getByPlaceholderText(/your password/i)).toHaveValue('TrustVaultDemo2026!')
+    expect(screen.getByLabelText(/email address/i)).toHaveValue('admin@vaultora.dev')
+    expect(screen.getByPlaceholderText(/your password/i)).toHaveValue('VaultoraDemo2026!')
   })
 
   it('switches to forgot password mode and back', async () => {
@@ -84,7 +84,7 @@ describe('LoginPage', () => {
     expect(screen.getByRole('heading', { name: /reset password/i })).toBeInTheDocument()
     const backBtn = screen.getByRole('button', { name: /back to sign in/i })
     await user.click(backBtn)
-    expect(screen.getByRole('heading', { name: /TrustVault/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Vaultora/i })).toBeInTheDocument()
   })
 
   it('expands and collapses the Supabase database setup guide', async () => {

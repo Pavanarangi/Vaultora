@@ -73,7 +73,7 @@ export default function LoginPage() {
       return {
         title: 'Invalid Credentials',
         message:
-          'The email or password does not match any existing account. If you are new to TrustVault, please switch to Sign Up.',
+          'The email or password does not match any existing account. If you are new to Vaultora, please switch to Sign Up.',
         action: 'signup',
       }
     }
@@ -140,7 +140,7 @@ export default function LoginPage() {
           toast.success('Account created! Please check your email to confirm.')
         } else {
           await initialize()
-          toast.success('Account created! Welcome to TrustVault.')
+          toast.success('Account created! Welcome to Vaultora.')
           navigate('/dashboard')
         }
       } else if (mode === 'signin') {
@@ -151,7 +151,7 @@ export default function LoginPage() {
         if (signInError) throw signInError
 
         await initialize()
-        toast.success('Welcome back to TrustVault!')
+        toast.success('Welcome back to Vaultora!')
         navigate('/dashboard')
       } else if (mode === 'forgot') {
         const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
@@ -190,7 +190,7 @@ export default function LoginPage() {
   }
 
   const handleCopySetupSql = async () => {
-    const sqlText = `-- TrustVault Complete Setup: Execute in Supabase SQL Editor
+    const sqlText = `-- Vaultora Complete Setup: Execute in Supabase SQL Editor
 -- File: supabase/COMPLETE_SETUP.sql in project root
 -- 1. Creates profiles, documents, document_grants, audit_logs
 -- 2. Sets up triggers and RLS policies
@@ -207,7 +207,7 @@ export default function LoginPage() {
 
   const fillQuickDemo = (demoEmail: string) => {
     setEmail(demoEmail)
-    setPassword('TrustVaultDemo2026!')
+    setPassword('VaultoraDemo2026!')
     if (mode === 'signup') {
       setFullName(demoEmail.split('@')[0].toUpperCase())
     }
@@ -228,7 +228,7 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-600 shadow-xl shadow-brand-600/30 mb-4">
             <Lock className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gradient mb-1">TrustVault</h1>
+          <h1 className="text-3xl font-bold text-gradient mb-1">Vaultora</h1>
           <p className="text-gray-400 text-sm">Secure enterprise document management</p>
         </div>
 
@@ -521,7 +521,7 @@ export default function LoginPage() {
                 <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
-                    onClick={() => fillQuickDemo('admin@trustvault.dev')}
+                    onClick={() => fillQuickDemo('admin@vaultora.dev')}
                     className="px-2 py-1.5 rounded bg-surface-700/60 hover:bg-surface-700 text-xs text-purple-300 border border-purple-500/20 text-center truncate transition-colors"
                     title="Fill Admin test user"
                   >
@@ -529,7 +529,7 @@ export default function LoginPage() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => fillQuickDemo('alice@trustvault.dev')}
+                    onClick={() => fillQuickDemo('alice@vaultora.dev')}
                     className="px-2 py-1.5 rounded bg-surface-700/60 hover:bg-surface-700 text-xs text-blue-300 border border-blue-500/20 text-center truncate transition-colors"
                     title="Fill Owner test user"
                   >
@@ -537,7 +537,7 @@ export default function LoginPage() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => fillQuickDemo('bob@trustvault.dev')}
+                    onClick={() => fillQuickDemo('bob@vaultora.dev')}
                     className="px-2 py-1.5 rounded bg-surface-700/60 hover:bg-surface-700 text-xs text-green-300 border border-green-500/20 text-center truncate transition-colors"
                     title="Fill Viewer test user"
                   >
@@ -566,7 +566,7 @@ export default function LoginPage() {
 
                 {showSetupGuide && (
                   <div className="mt-2 p-3.5 bg-surface-700/50 rounded-xl border border-surface-600 text-xs text-gray-300 space-y-2.5 animate-fade-in">
-                    <p className="font-medium text-white">To run TrustVault with a fresh Supabase project:</p>
+                    <p className="font-medium text-white">To run Vaultora with a fresh Supabase project:</p>
                     <ol className="list-decimal list-inside space-y-1 text-gray-300">
                       <li>Open your <strong>Supabase Dashboard</strong></li>
                       <li>Navigate to <strong>SQL Editor</strong> &gt; <strong>New query</strong></li>
@@ -603,7 +603,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-xs text-gray-600 mt-6">
-          TrustVault &mdash; Snovasys Fresher Hiring Challenge 2026
+          Vaultora &mdash; Snovasys Fresher Hiring Challenge 2026
         </p>
       </div>
     </div>

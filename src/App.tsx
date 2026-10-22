@@ -64,7 +64,7 @@ export default function App() {
             </svg>
           </div>
           <LoadingSpinner size="md" />
-          <p className="text-gray-400 text-sm">Loading TrustVault...</p>
+          <p className="text-gray-400 text-sm">Loading Vaultora...</p>
         </div>
       </div>
     )

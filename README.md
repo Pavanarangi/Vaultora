@@ -1,8 +1,8 @@
-# TrustVault
+# Vaultora
 
-**Secure Document Vault** — Snovasys Fresher Hiring Challenge 2026
+**Enterprise Secure Document Vault** — Snovasys Fresher Hiring Challenge 2026
 
-TrustVault is a secure enterprise document management system featuring role-based access control, explicit per-document permission grants, private encrypted file storage, and a tamper-evident audit trail.
+Vaultora is a secure enterprise document management system featuring role-based access control, explicit per-document permission grants, private encrypted file storage, and a tamper-evident audit trail.
 
 ---
 
@@ -46,8 +46,8 @@ TrustVault is a secure enterprise document management system featuring role-base
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/your-org/trustvault.git
-cd trustvault
+git clone https://github.com/Pavanarangi/TrustVault.git
+cd TrustVault
 npm install
 ```
 

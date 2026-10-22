@@ -6,7 +6,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn(
-    '[TrustVault] Supabase credentials not configured. ' +
+    '[Vaultora] Supabase credentials not configured. ' +
     'Copy .env.example to .env.local and fill in your Supabase project URL and anon key.'
   )
 }
