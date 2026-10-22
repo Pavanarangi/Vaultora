@@ -141,7 +141,57 @@ just deploy it
      - **Production URL:** [https://trustvault-nu.vercel.app](https://trustvault-nu.vercel.app)
      - **Deployment URL:** [https://trustvault-egvtp5ue1-pavanarangi2005-9333.vercel.app](https://trustvault-egvtp5ue1-pavanarangi2005-9333.vercel.app)
      - **Vercel Project Dashboard:** [https://vercel.com/pavanarangi2005-9333/trustvault](https://vercel.com/pavanarangi2005-9333/trustvault)
-3. **Live Verification:**
-   - Performed HTTP GET check on `https://trustvault-nu.vercel.app` confirming clean HTML serving with valid assets, title, and metadata.
+---
+
+### Prompt 5, 6, 7 & 8
+**User Requests:**
+```
+Setup required: Supabase is not configured. Copy .env.example to .env.local and add your Supabase credentials
+it is showing like this
+sb_publishable_fuPWGC78eyYfRyZpmX-czA_pHSTvTOg
+there were issues during login ,clear them 
+```
+
+### Defect 9: Supabase Login and Authentication Friction Points
+- **Symptoms:**
+  1. Signup or login attempts hit cryptic Supabase Auth errors: `Email rate limit exceeded` (`over_email_send_rate_limit`), `Email not confirmed`, `Invalid login credentials`, or `Database error saving new user`.
+  2. Free tier Supabase projects limit signup confirmation emails to 3/hour; once reached, users were blocked with no guidance.
+  3. When signup succeeded with email confirmation enabled, `data.session` is `null`. A brief toast was shown but the form remained open without clear guidance or a resend option.
+  4. If `public.profiles` table was not yet migrated in Supabase (`PGRST205`), `fetchProfile` failed silently and left `profile: null`. The dashboard rendered blank names, and document ownership checks failed.
+  5. Password recovery / forgot password mode was missing.
+  6. Evaluators had no quick test credentials to verify the application.
+
+- **Root Causes:**
+  - Supabase Auth errors were rendered as raw strings without context-specific remediation instructions.
+  - Absence of an explicit email confirmation pending view with a resend button and developer instructions to toggle off "Confirm email".
+  - `authStore.ts` lacked a fallback profile synthesizer when database rows or tables are not yet synced.
+  - Lack of a built-in SQL setup guide / one-click reference tool for the database schema.
+
+- **Fix:**
+  - **`src/stores/authStore.ts`**:
+    - Made initialization listener registration idempotent (`authListenerRegistered` guard).
+    - Added resilient fallback profile generation from `session.user` when database queries fail or are delayed.
+    - Added automatic profile record creation when missing (`PGRST116`).
+  - **`src/pages/LoginPage.tsx`**:
+    - Implemented `parseAuthError` providing friendly titles, clear explanations, and direct action triggers (e.g., switch to Sign Up on invalid credentials, resend confirmation on unconfirmed email, view SQL setup instructions on schema errors).
+    - Added dedicated `confirm_pending` screen with email sent feedback, resend button, and Supabase setting tip.
+    - Added "Forgot password?" password reset workflow (`resetPasswordForEmail`).
+    - Added 1-click Quick Test Account buttons (`admin@trustvault.dev`, `alice@trustvault.dev`, `bob@trustvault.dev`).
+    - Added collapsible "Supabase Database Setup Guide" with copyable reference to `COMPLETE_SETUP.sql`.
+  - **`src/test/LoginPage.test.tsx`**:
+    - Added unit tests covering quick demo fills, forgot password toggle, and setup guide expansion. All 46 tests passing.
+
+---
+
+## Verification Summary (Updated)
+
+| Check | Tool | Result |
+|-------|------|--------|
+| TypeScript Typecheck | `tsc -b` | 0 errors |
+| Production Build | `vite build` | Succeeded (dist created) |
+| Linter | `oxlint` | 0 warnings, 0 errors (44 files) |
+| Unit Tests | `vitest run` | 9/9 test files passed (46/46 tests) |
+| Live URL | Vercel | https://trustvault-nu.vercel.app |
+
 
 

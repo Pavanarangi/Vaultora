@@ -66,4 +66,32 @@ describe('LoginPage', () => {
     await user.click(screen.getByLabelText(/show password/i))
     expect(passwordInput).toHaveAttribute('type', 'text')
   })
+
+  it('fills demo credentials when clicking quick test account button', async () => {
+    const user = userEvent.setup()
+    renderLogin()
+    const adminBtn = screen.getByRole('button', { name: /admin/i })
+    await user.click(adminBtn)
+    expect(screen.getByLabelText(/email address/i)).toHaveValue('admin@trustvault.dev')
+    expect(screen.getByPlaceholderText(/your password/i)).toHaveValue('TrustVaultDemo2026!')
+  })
+
+  it('switches to forgot password mode and back', async () => {
+    const user = userEvent.setup()
+    renderLogin()
+    const forgotBtn = screen.getByRole('button', { name: /forgot password/i })
+    await user.click(forgotBtn)
+    expect(screen.getByRole('heading', { name: /reset password/i })).toBeInTheDocument()
+    const backBtn = screen.getByRole('button', { name: /back to sign in/i })
+    await user.click(backBtn)
+    expect(screen.getByRole('heading', { name: /TrustVault/i })).toBeInTheDocument()
+  })
+
+  it('expands and collapses the Supabase database setup guide', async () => {
+    const user = userEvent.setup()
+    renderLogin()
+    const guideToggle = screen.getByRole('button', { name: /database setup guide/i })
+    await user.click(guideToggle)
+    expect(screen.getByText(/COMPLETE_SETUP\.sql/i)).toBeInTheDocument()
+  })
 })
