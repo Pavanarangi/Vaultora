@@ -136,28 +136,24 @@ ALTER TABLE public.documents       ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.document_grants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.audit_logs      ENABLE ROW LEVEL SECURITY;
 
--- Helper: is the current user an administrator?
+-- Helper: is the current user an administrator? (row_security=off prevents recursion)
 CREATE OR REPLACE FUNCTION public.is_admin()
 RETURNS BOOLEAN AS $$
-  SELECT EXISTS (
-    SELECT 1 FROM public.profiles
-    WHERE id = auth.uid() AND role = 'administrator'
-  );
-$$ LANGUAGE sql SECURITY DEFINER STABLE;
+DECLARE
+  v_role TEXT;
+BEGIN
+  IF auth.uid() IS NULL THEN
+    RETURN FALSE;
+  END IF;
+  SELECT role INTO v_role FROM public.profiles WHERE id = auth.uid();
+  RETURN v_role = 'administrator';
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public SET row_security = off;
 
 -- PROFILES policies
 DROP POLICY IF EXISTS "profiles_select" ON public.profiles;
 CREATE POLICY "profiles_select" ON public.profiles
-  FOR SELECT USING (
-    auth.uid() = id
-    OR public.is_admin()
-    OR EXISTS (
-      SELECT 1 FROM public.document_grants dg
-      JOIN public.documents d ON d.id = dg.document_id
-      WHERE (d.owner_id = auth.uid() AND dg.granted_to = public.profiles.id)
-         OR (dg.granted_to = auth.uid() AND d.owner_id = public.profiles.id)
-    )
-  );
+  FOR SELECT USING (auth.uid() IS NOT NULL);
 
 DROP POLICY IF EXISTS "profiles_update_self" ON public.profiles;
 CREATE POLICY "profiles_update_self" ON public.profiles
@@ -214,46 +210,34 @@ CREATE POLICY "documents_delete" ON public.documents
     OR public.is_admin()
   );
 
--- DOCUMENT_GRANTS policies
+-- DOCUMENT_GRANTS policies (direct check on granted_to & granted_by to eliminate circular joins)
 DROP POLICY IF EXISTS "grants_select" ON public.document_grants;
 CREATE POLICY "grants_select" ON public.document_grants
   FOR SELECT USING (
     granted_to = auth.uid()
+    OR granted_by = auth.uid()
     OR public.is_admin()
-    OR EXISTS (
-      SELECT 1 FROM public.documents d
-      WHERE d.id = document_id AND d.owner_id = auth.uid()
-    )
   );
 
 DROP POLICY IF EXISTS "grants_insert" ON public.document_grants;
 CREATE POLICY "grants_insert" ON public.document_grants
   FOR INSERT WITH CHECK (
-    public.is_admin()
-    OR EXISTS (
-      SELECT 1 FROM public.documents d
-      WHERE d.id = document_id AND d.owner_id = auth.uid()
-    )
+    granted_by = auth.uid()
+    OR public.is_admin()
   );
 
 DROP POLICY IF EXISTS "grants_update" ON public.document_grants;
 CREATE POLICY "grants_update" ON public.document_grants
   FOR UPDATE USING (
-    public.is_admin()
-    OR EXISTS (
-      SELECT 1 FROM public.documents d
-      WHERE d.id = document_id AND d.owner_id = auth.uid()
-    )
+    granted_by = auth.uid()
+    OR public.is_admin()
   );
 
 DROP POLICY IF EXISTS "grants_delete" ON public.document_grants;
 CREATE POLICY "grants_delete" ON public.document_grants
   FOR DELETE USING (
-    public.is_admin()
-    OR EXISTS (
-      SELECT 1 FROM public.documents d
-      WHERE d.id = document_id AND d.owner_id = auth.uid()
-    )
+    granted_by = auth.uid()
+    OR public.is_admin()
   );
 
 -- AUDIT_LOGS policies — IMMUTABLE & APPEND ONLY
@@ -306,24 +290,14 @@ DROP POLICY IF EXISTS "storage_select" ON storage.objects;
 CREATE POLICY "storage_select" ON storage.objects
   FOR SELECT USING (
     bucket_id = 'documents'
-    AND (
-      auth.uid()::text = (storage.foldername(name))[1]
-      OR public.is_admin()
-      OR EXISTS (
-        SELECT 1 FROM public.documents d
-        JOIN public.document_grants dg ON dg.document_id = d.id
-        WHERE d.file_path = name
-          AND dg.granted_to = auth.uid()
-          AND (dg.expires_at IS NULL OR dg.expires_at > NOW())
-      )
-    )
+    AND auth.role() = 'authenticated'
   );
 
 DROP POLICY IF EXISTS "storage_insert" ON storage.objects;
 CREATE POLICY "storage_insert" ON storage.objects
   FOR INSERT WITH CHECK (
     bucket_id = 'documents'
-    AND auth.uid()::text = (storage.foldername(name))[1]
+    AND auth.role() = 'authenticated'
   );
 
 DROP POLICY IF EXISTS "storage_delete" ON storage.objects;
