@@ -209,7 +209,8 @@ there were issues during login ,clear them
 | Linter | `oxlint` | 0 warnings, 0 errors (44 files) |
 | Unit Tests | `vitest run` | 9/9 test files passed (46/46 tests) |
 | Supabase Auth Signup | Live Test | Successful (session returned instantly) |
-| Live URL | Vercel | https://trustvault-nu.vercel.app |
+| Live URL | Vercel | https://vaultora-nine.vercel.app |
+| GitHub Repo | Git | https://github.com/Pavanarangi/Vaultora |
 
 
 

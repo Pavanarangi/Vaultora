@@ -46,8 +46,8 @@ Vaultora is a secure enterprise document management system featuring role-based 
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/Pavanarangi/TrustVault.git
-cd TrustVault
+git clone https://github.com/Pavanarangi/Vaultora.git
+cd Vaultora
 npm install
 ```
 
@@ -70,9 +70,9 @@ supabase db push
 ### 4. Seed the Database
 
 Run `supabase/seed.sql` in the SQL editor. This creates:
-- `admin@trustvault.dev` / `Admin1234!` — administrator role
-- `alice@trustvault.dev` / `Alice1234!` — owner role  
-- `bob@trustvault.dev` / `Bob1234!` — viewer role
+- `admin@vaultora.dev` / `Admin1234!` — administrator role
+- `alice@vaultora.dev` / `Alice1234!` — owner role  
+- `bob@vaultora.dev` / `Bob1234!` — viewer role
 
 ### 5. Start Development Server
 
@@ -100,9 +100,9 @@ npm run test:ui
 
 ## Deployment
 
-- **Live Production URL:** [https://trustvault-nu.vercel.app](https://trustvault-nu.vercel.app)
-- **Deployment URL:** [https://trustvault-egvtp5ue1-pavanarangi2005-9333.vercel.app](https://trustvault-egvtp5ue1-pavanarangi2005-9333.vercel.app)
-- **Vercel Project Dashboard:** [https://vercel.com/pavanarangi2005-9333/trustvault](https://vercel.com/pavanarangi2005-9333/trustvault)
+- **Live Production URL:** [https://vaultora-nine.vercel.app](https://vaultora-nine.vercel.app)
+- **Deployment URL:** [https://vaultora-559rygthz-pavanarangi2005-9333.vercel.app](https://vaultora-559rygthz-pavanarangi2005-9333.vercel.app)
+- **Vercel Project Dashboard:** [https://vercel.com/pavanarangi2005-9333/vaultora](https://vercel.com/pavanarangi2005-9333/vaultora)
 
 To redeploy or update:
 ```bash
