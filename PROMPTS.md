@@ -123,3 +123,25 @@ complete the application fast
    - `oxlint` completed on 44 files with 0 errors and 0 warnings.
    - Git working tree committed.
 
+---
+
+### Prompt 4
+**User Request:**
+```
+just deploy it
+```
+
+**Actions & Deployment Completed:**
+1. **Production Deployment Configuration:**
+   - Configured `vercel.json` with SPA routing rewrites to ensure direct route visits (`/dashboard`, `/documents`, etc.) resolve properly to `/index.html`.
+2. **Vercel Production Deployment:**
+   - Linked project under scope `pavanarangi2005-9333` with project name `trustvault`.
+   - Built and uploaded production bundle (`dist/`).
+   - Production deployment succeeded:
+     - **Production URL:** [https://trustvault-nu.vercel.app](https://trustvault-nu.vercel.app)
+     - **Deployment URL:** [https://trustvault-egvtp5ue1-pavanarangi2005-9333.vercel.app](https://trustvault-egvtp5ue1-pavanarangi2005-9333.vercel.app)
+     - **Vercel Project Dashboard:** [https://vercel.com/pavanarangi2005-9333/trustvault](https://vercel.com/pavanarangi2005-9333/trustvault)
+3. **Live Verification:**
+   - Performed HTTP GET check on `https://trustvault-nu.vercel.app` confirming clean HTML serving with valid assets, title, and metadata.
+
+

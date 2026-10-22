@@ -100,11 +100,15 @@ npm run test:ui
 
 ## Deployment
 
-**Quick Deploy to Vercel:**
-1. Push to GitHub
-2. Import repo in Vercel
-3. Add environment variables from `.env.example`
-4. Deploy
+- **Live Production URL:** [https://trustvault-nu.vercel.app](https://trustvault-nu.vercel.app)
+- **Deployment URL:** [https://trustvault-egvtp5ue1-pavanarangi2005-9333.vercel.app](https://trustvault-egvtp5ue1-pavanarangi2005-9333.vercel.app)
+- **Vercel Project Dashboard:** [https://vercel.com/pavanarangi2005-9333/trustvault](https://vercel.com/pavanarangi2005-9333/trustvault)
+
+To redeploy or update:
+```bash
+npm run build
+npx vercel deploy --prod
+```
 
 ---
 
