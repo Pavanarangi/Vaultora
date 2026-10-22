@@ -60,7 +60,7 @@ export default function SharedPage() {
                   <td className="table-cell text-right">
                     <Link
                       to={`/documents/${doc.id}`}
-                      className="btn-ghost text-xs opacity-0 group-hover:opacity-100"
+                      className="btn-ghost text-xs opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                       id={`view-shared-${doc.id}`}
                     >
                       <Eye className="w-3.5 h-3.5" /> View

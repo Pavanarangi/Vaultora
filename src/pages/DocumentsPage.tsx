@@ -209,7 +209,7 @@ export default function DocumentsPage() {
                     {formatRelativeTime(doc.updated_at)}
                   </td>
                   <td className="table-cell">
-                    <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center justify-end gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                       <Link
                         to={`/documents/${doc.id}`}
                         className="btn-ghost p-1.5"
