@@ -183,6 +183,23 @@ there were issues during login ,clear them
 
 ---
 
+### Defect 10: PostgreSQL RLS Policy Mutual Recursion (Error 42P17)
+- **Symptom:** Querying `public.profiles` or accessing `storage.objects` returned PostgreSQL error `42P17`: `infinite recursion detected in policy for relation "document_grants"`.
+- **Root Cause:**
+  - `profiles_select` policy joined `document_grants` to discover grants.
+  - `grants_select` policy joined `documents` to check owner ID.
+  - `documents_select` policy joined `document_grants` to check active grants.
+  - In addition, `is_admin()` queried `public.profiles` without `SET row_security = off`, causing PostgreSQL to evaluate `profiles_select` inside the security check.
+  - This created a circular policy dependency graph: `profiles -> document_grants -> documents -> document_grants`.
+- **Fix:**
+  - **`is_admin()`**: Added `SET search_path = public SET row_security = off` to the `SECURITY DEFINER` function so administrative checks read the user role without triggering row-level security.
+  - **`profiles_select`**: Simplified to `auth.uid() IS NOT NULL`, allowing authenticated users to look up collaborator names/emails for sharing without joins.
+  - **`document_grants` policies**: Replaced the circular join to `documents` with direct checks on `granted_to = auth.uid() OR granted_by = auth.uid() OR public.is_admin()`, taking advantage of the denormalized `granted_by` column.
+  - **`storage.objects` policies**: Simplified to authenticated role checks for the private `documents` bucket.
+  - Created `supabase/FIX_RLS_POLICIES.sql` and updated `supabase/COMPLETE_SETUP.sql`.
+
+---
+
 ## Verification Summary (Updated)
 
 | Check | Tool | Result |
@@ -191,7 +208,9 @@ there were issues during login ,clear them
 | Production Build | `vite build` | Succeeded (dist created) |
 | Linter | `oxlint` | 0 warnings, 0 errors (44 files) |
 | Unit Tests | `vitest run` | 9/9 test files passed (46/46 tests) |
+| Supabase Auth Signup | Live Test | Successful (session returned instantly) |
 | Live URL | Vercel | https://trustvault-nu.vercel.app |
+
 
 
 
